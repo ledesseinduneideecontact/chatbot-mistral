@@ -12,6 +12,16 @@ API_KEY = os.getenv("MISTRAL_API_KEY")
 
 app = FastAPI()
 
+@app.get("/healthz")
+@app.head("/healthz")
+async def health_check():
+    return {"status": "ok"}
+
+@app.get("/", response_class=HTMLResponse)
+@app.head("/")
+async def root():
+    return HTML_CONTENT
+
 # Interface HTML simple
 HTML_CONTENT = """
 <!DOCTYPE html>
@@ -117,10 +127,6 @@ HTML_CONTENT = """
 </body>
 </html>
 """
-
-@app.get("/", response_class=HTMLResponse)
-async def root():
-    return HTML_CONTENT
 
 @app.post("/chat")
 async def chat(message: dict):
